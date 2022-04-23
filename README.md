@@ -29,6 +29,10 @@ The mongos acts as a query router for client applications, handling both read an
 
 Config servers are the authoritative source of sharding metadata. The sharding metadata reflects the state and organization of the sharded data. The metadata contains the list of sharded collections, routing information, etc.
 
+For a simple visual illustration, see image below. Very simplified construction with only one shard.
+
+![shardillustration](https://webimages.mongodb.com/_com_assets/cms/kyc08hm61who5ts6t-image4.png?auto=format%252Ccompress)
+
 ### Provide implementation of map and reduce function
 - [ ] Committed to project
 
