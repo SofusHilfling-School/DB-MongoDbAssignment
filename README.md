@@ -7,6 +7,9 @@ Run the following commands:
 $ docker compose up -d
 ```
 
+The website can then be accessed on `localhost:8080`
+Mongo Express can be accessed on `localhost:8090`
+
 ### Import dataset
 First open bash inside the mongodb container:
 ```
