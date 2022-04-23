@@ -22,10 +22,10 @@ Bla bla bla
 Bla bla bla
 
 ### Provide implementation of map and reduce function
-[ ] Committed to project
+- [ ] Committed to project
 
 ###  Provide execution command for running MapReduce or the aggregate way of doing the same
-[ ] Committed to project
+- [ ] Committed to project
 
 ### Provide top 10 recorded out of the sorted result. (hint: use sort on the result returned by MapReduce or the aggregate way of doing the same)
-[ ] Committed to project
+- [ ] Committed to project
