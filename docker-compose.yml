@@ -2,7 +2,11 @@
 version: '3.1'
 
 services:
-
+  website:
+    build: ./Website
+    ports:
+      - 8080:80
+      - 8081:443
   mongo:
     image: mongo
     restart: always
@@ -18,7 +22,7 @@ services:
     image: mongo-express
     restart: always
     ports:
-      - 8081:8081
+      - 8090:8081
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: example
