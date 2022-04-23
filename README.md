@@ -7,6 +7,16 @@ Run the following commands:
 $ docker compose up -d
 ```
 
+### Import dataset
+First open bash inside the mongodb container:
+```
+$ docker compose exec mongo bash
+```
+Then restore the tweets by running:
+```
+$ mongorestore --username root --password example --authenticationDatabase admin 'mongodb://localhost:27017/local' /datadump/twitter/tweets.bson
+```
+
 ## Assignment questions
 ### What is sharding in mongoDB?
 Sharding a database is basically horizontal scaling of the given database. It is more specifically a method for distributing or partitioning data across multiple machines.
