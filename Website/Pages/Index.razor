@@ -14,11 +14,14 @@
 }
 else
 {
-    <div class="input-group w-25">
-        <span class="input-group-text">@@</span>
-        <input type="text" class="form-control" placeholder="Search author..." @bind-value="AuthorSearchField"/>
-        <button class="btn btn-primary" @onclick="SearchForAuthor">🔍</button>
-    </div>
+    <form @onsubmit="SearchForAuthor">
+        <div class="input-group w-25">
+            <span class="input-group-text">@@</span>
+            <input type="text" class="form-control" placeholder="Search author..." @bind-value="AuthorSearchField"/>
+            <button type="submit" class="btn btn-primary">🔍</button>
+        </div>
+    </form>
+    
 
     <p>You can like a tweet by clicking on it!</p>
 
