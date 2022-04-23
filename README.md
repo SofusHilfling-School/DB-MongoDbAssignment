@@ -16,7 +16,14 @@ It is useful when no single machine can handle large modern-day workloads, by al
 Horizontal scaling, also known as scaling-out, refers to adding machines to share the data set and load. Horizontal scaling allows for near-limitless scaling to handle big data and intense workloads.
 
 ### What are the different components required to implement sharding?
-Bla bla bla
+- **Shards**
+A shard is a replica set that contains a subset of the cluster’s data.
+
+- **Mongos**
+The mongos acts as a query router for client applications, handling both read and write operations. It dispatches client requests to the relevant shards and aggregates the result from shards into a consistent client response. Clients connect to a mongos, not to individual shards.
+
+- **Config servers**
+Config servers are the authoritative source of sharding metadata. The sharding metadata reflects the state and organization of the sharded data. The metadata contains the list of sharded collections, routing information, etc.
 
 ### Explain architecture of sharding in mongoDB?
 Bla bla bla
