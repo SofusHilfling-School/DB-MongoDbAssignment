@@ -1,19 +1,67 @@
 ﻿@page "/"
 
 @using Website.Data
+@using Website.Other
 @inject DataLoader DataLoader
 
 <PageTitle>Index</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>Latest 10 tweets in database</h1>
 
-Welcome to your new app.
+@if (tweets == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="input-group w-25">
+        <span class="input-group-text">@@</span>
+        <input type="text" class="form-control" placeholder="Search author..." @bind-value="AuthorSearchField"/>
+        <button class="btn btn-primary" @onclick="SearchForAuthor">🔍</button>
+    </div>
 
+    <p>Like tweet by clicking on it</p>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Author</th>
+            <th>Tweet body</th>
+            <th>Retweets</th>
+            <th>Favorites</th>
+            <th>Created at</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (Tweet tweet in tweets)
+        {
+            <TweetComp Tweet="tweet" OnRowClicked="@LikeTweet"></TweetComp>
+        }
+        </tbody>
+    </table>
+}
 
 @code {
-    protected override void OnInitialized()
+    private List<Tweet>? tweets;
+    public string AuthorSearchField { get; set; }
+
+    protected override async Task OnInitializedAsync()
     {
-        base.OnInitialized();
+        tweets = await DataLoader.GetLatest10TweetsAsync();
     }
 
+    async Task SearchForAuthor()
+        => tweets = string.IsNullOrWhiteSpace(AuthorSearchField)
+        ? await DataLoader.GetLatest10TweetsAsync() 
+        : await DataLoader.GetLatest10TweetsAsync(AuthorSearchField);
+
+    async Task LikeTweet(TweetEventArgs tweetEvent)
+    {
+        if (tweetEvent.Tweet.favorited)
+            await DataLoader.UnlikeTweet(tweetEvent.Tweet.id);
+        else
+            await DataLoader.LikeTweet(tweetEvent.Tweet.id);
+
+        await SearchForAuthor();
+    }
 }

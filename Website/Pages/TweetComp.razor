@@ -1,0 +1,26 @@
+﻿@using Website.Data
+@using Website.Other
+
+<tr class="@(Tweet.favorited ? "bg-success" : "")" @onclick="HandleOnRowClicked">
+    <td>@@@Tweet.user.screen_name</td>
+    <td>@Tweet.text</td>
+    <td>@Tweet.retweet_count</td>
+    <td>@Tweet.favorite_count</td>
+    <td>@Tweet.created_at</td>
+</tr>
+
+
+
+@code {
+    [Parameter, EditorRequired]
+    public Tweet Tweet { get; set; }
+
+    [Parameter]
+    public EventCallback<TweetEventArgs> OnRowClicked { get; set; }
+
+    async Task HandleOnRowClicked()
+    {
+        TweetEventArgs args = new() { Tweet = Tweet };
+        await OnRowClicked.InvokeAsync(args);
+    }
+}

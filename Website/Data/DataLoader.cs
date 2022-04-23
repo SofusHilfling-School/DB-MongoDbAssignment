@@ -16,16 +16,37 @@ public class DataLoader
     public async Task<List<Tweet>> GetLatest10TweetsAsync()
         => await _tweetsCollection
                         .Find(_ => true)
+                        .SortByDescending(t => t.created_at)
                         .Limit(10)
                         .ToListAsync();
 
-    public async Task AddTweetAsync(Tweet tweet)
-        => await _tweetsCollection.InsertOneAsync(tweet);
-}
+    public async Task<List<Tweet>> GetLatest10TweetsAsync(string author)
+        => await _tweetsCollection
+            .Find(t => t.user.screen_name == author)
+            .SortByDescending(t => t.created_at)
+            .Limit(10)
+            .ToListAsync();
 
-public class Tweet
-{
-    public string text { get; set; }
+    public async Task LikeTweet(long tweetId)
+    {
+        UpdateDefinition<Tweet> updateDefinition = Builders<Tweet>
+            .Update
+            .Set(t => t.favorited, true)
+            .Inc(t => t.favorite_count, 1);
+
+        UpdateResult result = await _tweetsCollection.UpdateOneAsync(t => t.id == tweetId, updateDefinition);
+    }
+
+    public async Task UnlikeTweet(long tweetId)
+    {
+        UpdateDefinition<Tweet> updateDefinition = Builders<Tweet>
+            .Update
+            .Set(t => t.favorited, false)
+            .Inc(t => t.favorite_count, -1);
+
+        UpdateResult result = await _tweetsCollection.UpdateOneAsync(t => t.id == tweetId, updateDefinition);
+    }
+
 }
 
 public class MongoDbConfiguration
