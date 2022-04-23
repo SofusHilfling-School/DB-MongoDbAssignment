@@ -9,7 +9,11 @@ $ docker compose up -d
 
 ## Assignment questions
 ### What is sharding in mongoDB?
-Bla bla bla
+Sharding a database is basically horizontal scaling of the given database. It is more specifically a method for distributing or partitioning data across multiple machines.
+
+It is useful when no single machine can handle large modern-day workloads, by allowing you to scale horizontally.
+
+Horizontal scaling, also known as scaling-out, refers to adding machines to share the data set and load. Horizontal scaling allows for near-limitless scaling to handle big data and intense workloads.
 
 ### What are the different components required to implement sharding?
 Bla bla bla
