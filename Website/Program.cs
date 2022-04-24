@@ -11,7 +11,7 @@ builder.Logging.AddSimpleConsole();
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<DataLoader>();
+builder.Services.AddScoped<DataLoader>();
 
 builder.Services.Configure<MongoDbConfiguration>(builder.Configuration.GetSection("MongoDb"));
 
