@@ -7,16 +7,6 @@ services:
     ports:
       - 8080:80
       - 8081:443
-  mongo:
-    image: mongo
-    restart: always
-    ports:
-      - 27017:27017
-    volumes:
-      - .\Data:/datadump
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
 
   mongo-express:
     image: mongo-express
@@ -24,6 +14,100 @@ services:
     ports:
       - 8090:8081
     environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: example
-      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+      ME_CONFIG_MONGODB_URL: mongodb://adminUser:pass1234@mongo-router:27017/
+      ME_CONFIG_MONGODB_ENABLE_ADMIN: true
+
+## Router (mongos)
+  mongo-router:
+    image: mongo:5.0.3
+    container_name: mongo-router
+    command: |
+      mongos --port 27017 --configdb rs-config-server/configsvr01:27017,configsvr02:27017,configsvr03:27017 --bind_ip_all
+    ports:
+      - 27017:27017
+    volumes:
+      - ./Scripts:/scripts
+      - ./Data:/datadump
+
+# Config Servers
+
+  ## Config server 01
+  configsvr01:
+    image: mongo:5.0.3
+    container_name: mongo-config-01 
+    command: |
+      mongod --port 27017 --configsvr --replSet rs-config-server
+    volumes:
+      - ./scripts:/scripts
+    ports:
+      - 27119:27017
+
+  ## Config server 02
+  configsvr02:
+    image: mongo:5.0.3
+    container_name: mongo-config-02 
+    command: |
+      mongod --port 27017 --configsvr --replSet rs-config-server
+    ports:
+      - 27120:27017
+
+  ## Config server 03
+  configsvr03:
+    image: mongo:5.0.3
+    container_name: mongo-config-03 
+    command: |
+      mongod --port 27017 --configsvr --replSet rs-config-server
+    ports:
+      - 27121:27017
+
+# Shards
+
+  ## Shards 01   
+  shard01-a:
+    image: mongo:5.0.3
+    container_name: shard-01-node-a
+    command: |
+      mongod --port 27017 --shardsvr --replSet rs-shard-01
+    volumes:
+      - ./Scripts:/scripts
+    ports:
+      - 27122:27017
+  shard01-b:
+    image: mongo:5.0.3
+    container_name: shard-01-node-b
+    command: |
+      mongod --port 27017 --shardsvr --replSet rs-shard-01
+    ports:
+      - 27123:27017
+  shard01-c:
+    image: mongo:5.0.3
+    container_name: shard-01-node-c
+    command: |
+      mongod --port 27017 --shardsvr --replSet rs-shard-01
+    ports:
+      - 27124:27017
+
+  ## Shards 02
+  shard02-a:
+    image: mongo:5.0.3
+    container_name: shard-02-node-a
+    command: |
+      mongod --port 27017 --shardsvr --replSet rs-shard-02
+    volumes:
+      - ./Scripts:/scripts
+    ports:
+      - 27125:27017
+  shard02-b:
+    image: mongo:5.0.3
+    container_name: shard-02-node-b
+    command: |
+      mongod --port 27017 --shardsvr --replSet rs-shard-02
+    ports:
+      - 27126:27017
+  shard02-c:
+    image: mongo:5.0.3
+    container_name: shard-02-node-c
+    command: |
+      mongod --port 27017 --shardsvr --replSet rs-shard-02
+    ports:
+      - 27127:27017
