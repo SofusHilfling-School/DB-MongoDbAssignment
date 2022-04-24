@@ -1,24 +1,19 @@
 # DB-MongoDbAssignment
 
 ## How to run
-### xxx
 Run the following commands:
 ```
 $ docker compose up -d
 ```
 
-The website can then be accessed on `localhost:8080`
-Mongo Express can be accessed on `localhost:8090`
+Then run the Powershell script `setup.ps1` to setup shards, default admin user, and import data.
 
-### Import dataset
-First open bash inside the mongodb container:
-```
-$ docker compose exec mongo bash
-```
-Then restore the tweets by running:
-```
-$ mongorestore --username root --password example --authenticationDatabase admin 'mongodb://localhost:27017/local' /datadump/twitter/tweets.bson
-```
+**NOTE:** The script sometimes breaks on 'Setup Router' step, if this happens just manually run the commands on line 14 and 18. This should fix it.
+
+### Access
+
+The website can then be accessed on `localhost:8080`. </br>
+Mongo Express can be accessed on `localhost:8090`.
 
 ## Assignment questions
 ### What is sharding in mongoDB?
@@ -47,10 +42,40 @@ For a simple visual illustration, see image below. Very simplified construction 
 ![shardillustration](https://webimages.mongodb.com/_com_assets/cms/kyc08hm61who5ts6t-image4.png?auto=format%252Ccompress)
 
 ### Provide implementation of map and reduce function
-- [ ] Committed to project
+Map-Reduce is deprecated starting in MongoDB 5.0 which means that this isn’t relevant. Map-Reduce is now [recommended](https://www.mongodb.com/docs/manual/reference/map-reduce-to-aggregation-pipeline/) to be done through the aggregation pipeline with operators such as `$group` and `$merge`.
+
+There is two aggregation pipeline operators with the same name but they are quite different form the concept of Map-Reduce
+
+`$map` can be used as part of the aggregation pipeline to apply expressions to each item in an array and then return the results.
+
+In contrast, `$reduce` also applies the expression to each item but combines the results into a single value.
 
 ###  Provide execution command for running MapReduce or the aggregate way of doing the same
-- [ ] Committed to project
+Below is an implementation of how to use the aggregate function to get the top 10 hashtags:
+```javascript
+db.tweets.aggregate([
+    {
+        $match: { 
+            "entities.hashtags": { 
+                $exists: true, 
+                $not: { $size:0 }
+            }
+        }
+    },
+    {
+        $group: {
+            _id: "$entities.hashtags.text", 
+            count: { $sum: 1 }
+        }
+    },
+    { 
+        $sort: { count: -1 }
+    },
+    {
+        $limit:10
+    }
+])
+```
 
 ### Provide top 10 recorded out of the sorted result. (hint: use sort on the result returned by MapReduce or the aggregate way of doing the same)
-- [ ] Committed to project
+See code above.
