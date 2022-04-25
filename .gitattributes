@@ -1,2 +1,0 @@
-# Convert scripts to LF line endings on checkout.
-./Scripts/ text eol=lf

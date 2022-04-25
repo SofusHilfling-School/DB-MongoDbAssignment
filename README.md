@@ -6,7 +6,11 @@ Run the following commands:
 $ docker compose up -d
 ```
 
-Then run the Powershell script `setup.ps1` to setup shards, default admin user, and import data.
+Then run the setup Powershell script to setup shards, default admin user, and import data.
+```
+> .\setup-replica-sets.ps1
+> .\setup-router.ps1
+```
 
 **NOTE:** The script sometimes breaks on 'Setup Router' step, if this happens just manually run the commands on line 14 and 18. This should fix it.
 

@@ -8,6 +8,8 @@ var config_replicaset_02 = {
     ]
 };
 
+printjson(config_replicaset_02)
+print("initiate replica set 2")
 var status_replicaset_02 = rs.initiate(config_replicaset_02);
 
 printjson(status_replicaset_02);
